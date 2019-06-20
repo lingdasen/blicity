@@ -2,8 +2,7 @@
 #作品简介
 
 - 名称：压力什么的都去死吧
-- 作品形式：基于Unreal 4 （虚幻4游戏引擎）开发，
-	</br卡牌第三人称动作硬核游戏>
+- 作品形式：基于Unreal 4 （虚幻4游戏引擎）开发，卡牌界面，第三人称动作硬核游戏
 
 ![ue4](https://raw.githubusercontent.com/lingdasen/blicity/master/images/2.png "ue4")
 ### 我们是谁
