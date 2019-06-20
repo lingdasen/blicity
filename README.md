@@ -25,6 +25,7 @@
 ### 作品展示
 
 - 请看宣传视频（宣传M.MP4）
+- https://www.bilibili.com/video/av52353125/ 
 ![demo](https://raw.githubusercontent.com/lingdasen/blicity/master/images/5.png "demo")
 ![demo](https://raw.githubusercontent.com/lingdasen/blicity/master/images/6.png "demo")
  ![demo](https://raw.githubusercontent.com/lingdasen/blicity/master/images/7.png "demo")
