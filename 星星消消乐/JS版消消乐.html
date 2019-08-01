@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
+    <style>
+        #grade_div {
+            display: inline-block;
+            width: 400px;
+            height: 90px;
+            background-color: #dfdfdf70;
+        }
+
+        .left {
+            font-size: 1.3em;
+            margin: 5px;
+            color: #c23f3f;
+        }
+
+        .right {
+            font-size: 1.3em;
+            margin: 5px;
+            margin-left: 46px;
+        }
+
+        .nowGrade {
+            font-size: 1.3em;
+            margin-top: 20px;
+            margin: 5px;
+            color: #c23f3f;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="body"></div>
+    </br>
+    <div id="grade_div">
+        <div>
+
+            <span class="left">当前关卡：
+                <span id="h_Pass">1</span>
+            </span>
+            <span class="right">需要分数：
+                <span id="h_PassGrade">1000</span>
+
+            </span>
+        </div>
+        <div style="margin-top: 10px">
+            <span class="nowGrade">当前分数：
+                <span id="h_nowGrade">1000</span>
+            </span>
+        </div>
+    </div>
+    <script type="text/javascript">
+
+        var m_starNumber = 0;
+        var m_InitNullRow = 0;
+        var m_ChessArray = new Array(100);
+
+
+        var m_Pass = 1;
+        var m_NowGrade = 0;
+        var m_PassNeedGrade = 1000;
+
+        GamePlay();
+
+
+        function GamePlay() {
+            createRandFullChessArray(3);
+            pChessArray();
+            ChessOnClick();
+            setHtmlGrade();
+
+            // while(true)
+            // {
+            //     if(detectionNotChess){
+            //         nextPass();
+            //     }
+            // }
+
+        }
+
+        //随机生成 星星数组 
+        function createRandFullChessArray(starNumber) {
+            m_starNumber = starNumber;
+            for (let index = 0; index < m_ChessArray.length; index++) {
+
+                var q = parseInt((Math.random() * 10) % m_starNumber);
+                for (let index2 = 0; index2 < m_starNumber; index2++) {
+                    if (q == index2) {
+                        m_ChessArray[index] = index2;
+                    }
+                }
+            }
+        }
+        console.log(m_ChessArray);
+
+        //打印棋牌
+        function pChessArray(refresh = false) {
+            for (let index = 0; index < m_ChessArray.length; index++) {
+
+                if (refresh) {
+                    setChessColor(index);
+                } else {
+                    if (index != 0 && index % 10 == 0) {
+
+                        var br = document.createElement("br")
+                    }
+                    /*创建一个完整的div并添加id属性*/
+                    var divE = document.createElement("div"); //创建div
+                    var divId = document.createAttribute("id"); //创建属性
+                    divId.value = index; //设置属性值
+                    divE.setAttributeNode(divId); //给div添加属性
+
+
+
+
+
+                    divE.style.display = "inline-block";
+                    divE.style.width = "40px";
+                    divE.style.height = "40px";
+                    divE.style.textAlign = "center";
+                    divE.style.margin = "2px";
+                    // var pText = document.createTextNode(m_ChessArray[index]);
+                    // divE.appendChild(pText);
+
+                    /*创建一个完整p标签并添加class属性*/
+                    // var pE = document.createElement("p");
+                    // var pClass = document.createAttribute("class");
+                    // pClass.value = "textClass";
+                    // pE.setAttributeNode(pClass)
+                    // /*创建一个文本*/
+                    // var pText = document.createTextNode(m_ChessArray[index]);
+                    // /*将文本添加p标签中*/
+                    // pE.appendChild(pText);
+                    // pE.style.display = "inline";
+                    // pE.style.color = "white";
+                    // /*将p标签添加到div中*/
+                    // divE.appendChild(pE);
+
+                    if (index != 0 && index % 10 == 0) {
+                        document.getElementById("body").appendChild(br);
+                    }
+                    document.getElementById("body").appendChild(divE);
+                    setChessColor(index);
+                }
+
+
+            }
+        }
+        //设置颜色
+        function setChessColor(id) {
+            var need = m_ChessArray[id];
+
+            switch (need) {
+                case -1:
+                    document.getElementById(id).style.backgroundColor = "rgba(0, 0, 0, 0)";
+                    break;
+                case 0:
+                    document.getElementById(id).style.backgroundColor = "red";
+
+                    break;
+                case 1:
+
+                    document.getElementById(id).style.backgroundColor = "#ffeb3b";
+                    break;
+                case 2:
+
+                    document.getElementById(id).style.backgroundColor = "#2196f3";
+
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        //为方块绑定OnClick();
+        function ChessOnClick() {
+            for (let index = 0; index < m_ChessArray.length; index++) {
+                document.getElementById(index).onclick = (function () {
+                    var i = index;
+                    return function () {
+                        // alert(i);
+                        selectChessSetArray(i);
+                    }
+                })()
+            }
+        }
+
+        //选中方块处理函数
+        function selectChessSetArray(index, Array = null) {
+            var searchArrayIndex = [];
+            searchArrayIndex.length = 0;
+
+            function searchChessArray(index, need) {
+                var y = parseInt(index / 10);
+                var x = parseInt(index % 10);
+                if (m_ChessArray[index] == need) {
+                    searchArrayIndex.push(index);
+                    if (y - 1 > -1 && !isArray(index - 10) && m_ChessArray[index - 10] == need) {
+                        searchChessArray(index - 10, need);
+                    }
+                    if (x + 1 < 10 && !isArray(index + 1) && m_ChessArray[index + 1] == need) {
+                        searchChessArray(index + 1, need);
+                    }
+                    if (y + 1 < 10 && !isArray(index + 10) && m_ChessArray[index + 10] == need) {
+                        searchChessArray(index + 10, need);
+                    }
+                    if (x - 1 > -1 && !isArray(index - 1) && m_ChessArray[index - 1] == need) {
+                        searchChessArray(index - 1, need);
+                    }
+                }
+            }
+
+            function isArray(needIndex) {
+                for (let index1 = 0; index1 < searchArrayIndex.length; index1++) {
+                    if (searchArrayIndex[index1] == needIndex) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            var m_need;
+            if (Array == null) {
+                m_need = m_ChessArray[index];
+            } else {
+                m_need = Array[index];
+            }
+
+            if (m_need != -1) {
+                searchChessArray(index, m_need)
+
+                if (searchArrayIndex.length > 1) {
+                    if (Array == null) {
+                        for (let index3 = 0; index3 < searchArrayIndex.length; index3++) {
+                            m_ChessArray[searchArrayIndex[index3]] = -1;
+                            setChessColor(searchArrayIndex[index3]);
+                        }
+                        for (let a = 0; a < 10; a++) {
+                            trimChessArrayY(a);
+                        }
+                        trimChessArrayX();
+                        setNowGrade(searchArrayIndex.length);
+                        setHtmlGrade();
+                        if(Array == null){
+                            isNextPass();
+                        }
+                        
+                    }
+                    return true;
+                }
+                if(Array == null){
+                    isNextPass();
+                }
+                // isNextPass();
+
+                return false;
+            }
+            return false;
+        }
+
+
+        //整理Y轴 方块
+        function trimChessArrayY(x) {
+            var needArray = [];
+            for (let y = 0; y < 10; y++) {
+                if (m_ChessArray[y * 10 + x] != -1) {
+                    needArray.push(m_ChessArray[y * 10 + x]);
+                }
+
+            }
+            for (let yy = 9; yy > -1; yy--) {
+                if (needArray.length != 0) {
+                    m_ChessArray[yy * 10 + x] = needArray.pop();
+                    setChessColor(yy * 10 + x);
+
+                } else {
+                    m_ChessArray[yy * 10 + x] = -1;
+                    setChessColor(yy * 10 + x);
+                }
+
+            }
+        }
+
+        //整理X轴 方块
+        function trimChessArrayX() {
+            var index = -1;
+            for (let i = 0; i < 10 - m_InitNullRow; i++) {
+                if (m_ChessArray[90 + i] == -1) {
+                    index = i;
+                    break;
+                }
+            }
+
+            if (index != -1) {
+                for (var i = index; i < 10 - m_InitNullRow; i++) {
+                    for (var j = 0; j < 10; j++) {
+                        if (i == 10 - m_InitNullRow - 1) {
+                            m_ChessArray[j * 10 + i] = -1;
+                            setChessColor(j * 10 + i);
+                        } else {
+                            m_ChessArray[j * 10 + i] = m_ChessArray[j * 10 + i + 1];
+                            setChessColor(j * 10 + i);
+                        }
+                    }
+                }
+                m_InitNullRow++;
+                trimChessArrayX();
+            }
+        }
+
+        //检测是否还有可消方块
+        function detectionNotChess() {
+            if (m_InitNullRow > 3) {
+                var copyChessArray = [100];
+                copyChessArray = Array.from(m_ChessArray);
+                for (var x = 0; x < m_InitNullRow; x++) {
+                    for (var y = 9; y > -1; y--) {
+                        if (selectChessSetArray(y * 10 + x, copyChessArray)) {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+
+        function setNowGrade(popNumber) {
+            if (popNumber < 6) {
+                m_NowGrade += popNumber * 10 + (popNumber - 2) * 10;
+                return;
+            }
+            if (popNumber < 10) {
+                m_NowGrade += popNumber * 10 + (popNumber - 2) * 10 + (popNumber - 5) * 10;
+                return;
+            }
+            else {
+                m_NowGrade += popNumber * 10 + (popNumber - 2) * 10 + (popNumber - 5) * 10 + 10;
+                return;
+            }
+        }
+
+        function nextPass() {
+            m_Pass++;
+            m_InitNullRow = 0;
+            if(m_Pass < 4){
+                m_PassNeedGrade = 1200 + m_Pass * 1200;
+            }else if(m_Pass < 6){
+                m_PassNeedGrade +=m_Pass * 450 + 300;
+            }
+            else{
+                m_PassNeedGrade +=m_Pass * 510 + 700;
+
+            
+            }
+            createRandFullChessArray(3);
+            pChessArray(true);
+            setHtmlGrade();
+        }
+
+        function setHtmlGrade() {
+            var p = document.getElementById("h_Pass");
+            p.innerHTML = "" + m_Pass;
+            var pg = document.getElementById("h_PassGrade");
+            var ng = document.getElementById("h_nowGrade");
+            pg.innerHTML = "" + m_PassNeedGrade;
+            ng.innerHTML = "" + m_NowGrade;
+        }
+
+        function isNextPass() {
+            if (m_NowGrade > m_PassNeedGrade) {
+                if(detectionNotChess())
+                {
+                    nextPass();
+                }
+            }
+            
+            // if(detectionNotChess())
+            // {
+            //     alert("你没有过关！");
+            // }
+        }
+
+      
+
+    </script>
+
+</body>
+
+</html>
